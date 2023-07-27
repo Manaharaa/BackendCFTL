@@ -2,7 +2,7 @@ const pool = require('../config/database');
 module.exports = {
     studentReg: (data, callBack) => {
         pool.query(
-            `INSERT INTO cftldb.std_reg (Full_Name, Pre_Name, Name_in, DOB, Gender, NIC, Address, City, Pre_Scl, Syllubus, Medium, Aca_Year, Guardian, G_Name, G_Address, G_City, G_Work, G_NIC, Contact_Home, Contact_Num, Email)
+            `INSERT INTO cftldb.std_reg (Full_Name, Pre_Name, Name_in, DOB, Gender, NIC, Address, City, Pre_Scl, Medium, Aca_Year, Guardian, G_Name, G_Address, G_City, G_Work, G_NIC, Contact_Home, Contact_Num, Email,status)
              VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
             [
                 data.Full_Name,
@@ -14,7 +14,6 @@ module.exports = {
                 data.Address,
                 data.City,
                 data.Pre_Scl,
-                data.Syllubus,
                 data.Medium,
                 data.Aca_Year,
                 data.Guardian,
@@ -25,7 +24,8 @@ module.exports = {
                 data.G_NIC,
                 data.Contact_Home,
                 data.Contact_Num,
-                data.Email
+                data.Email,
+                'pending'
             ],
             (error, results, fields) => {
                 if(error){
@@ -37,8 +37,8 @@ module.exports = {
     },
     studentRealReg: (data, callBack) => {
         pool.query(
-            `INSERT INTO cftldb.students (Full_Name, Pre_Name, Name_in, DOB, Gender, NIC, Address, City, Pre_Scl, Syllubus, Medium, Aca_Year, Guardian, G_Name, G_Address, G_City, G_Work, G_NIC, Contact_Home, Contact_Num, Email)
-             VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+            `INSERT INTO cftldb.students (Full_Name, Pre_Name, Name_in, DOB, Gender, NIC, Address, City, Pre_Scl, Medium, Aca_Year, Guardian, G_Name, G_Address, G_City, G_Work, G_NIC, Contact_Home, Contact_Num, Email)
+             VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
             [
                 data.Full_Name,
                 data.Pre_Name,
@@ -49,7 +49,6 @@ module.exports = {
                 data.Address,
                 data.City,
                 data.Pre_Scl,
-                data.Syllubus,
                 data.Medium,
                 data.Aca_Year,
                 data.Guardian,

@@ -18,7 +18,9 @@ module.exports = {
 
     viewRegStudents: (callBack) => {
         pool.query(
-            `SELECT * FROM cftldb.std_reg`,
+            `SELECT * 
+            FROM cftldb.std_reg
+            WHERE std_reg.status = 'pending'`,
             [],
             (error, results, fields) => {
                 if(error){
@@ -65,4 +67,35 @@ module.exports = {
             }
         );
     },
+    updateStudentStatus: (id, callBack) => {
+        pool.query(
+            `UPDATE cftldb.std_reg SET status = ? WHERE Std_reg_ID = ?`,
+            [
+                'rejected',
+                 id
+            ],
+            (error, results, fields) => {
+                if(error){
+                    return callBack(error,null);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+    
+    viewRejectStudents: (callBack) => {
+        pool.query(
+            `SELECT * 
+            FROM cftldb.std_reg
+            WHERE std_reg.status = 'rejected'`,
+            [],
+            (error, results, fields) => {
+                if(error){
+                    return callBack(error,null);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+
   }
