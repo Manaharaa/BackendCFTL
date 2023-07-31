@@ -1,4 +1,5 @@
-const {userlogin, viewRegStudents, viewStudents,getStudentById,deleteStudent,updateStudentStatus,viewRejectStudents} = require('./admin.service');
+const {userlogin, viewRegStudents, deletedTeacher,viewStudents,getStudentById,deleteStudent,updateStudentStatus,viewRejectStudents,teacherReg,
+    viewTeachers,getTecherDetailsToMove,teacherDelete,getDeletedTeachers,getStudentEmailById,viewCourseFees,updateCourseFees,courseRegOl,courseRegAl,getStudentDistrictsFromDB, getStudentCounts} = require('./admin.service');
 const {studentRealReg} = require('../student/student.service');
 module.exports = {
     login: (req, res) => {
@@ -91,7 +92,7 @@ module.exports = {
               });
             }
             const values = results;
-    //   console.log(values[0].Std_reg_ID);
+            
             studentRealReg(values, (err, results) => {
               if (err) {
                 console.log(err);
@@ -123,19 +124,7 @@ module.exports = {
           message: 'Inserted all students',
         });
       },
-    //   updateStudentStatus : (req, res) => {
-    //     const body = req.body;
-    //     updateStudentStatus(body, (err, results) => {
-    //         if(err){
-    //             console.log(err);
-    //             return;
-    //         }
-    //         return res.json({
-    //             success: 1,
-    //             message: 'Status updated successfully'
-    //         });
-    //     });
-    // },
+
     updateStudentStatus: (req, res) => {
         const ids = req.body.ids; // Get the array of IDs from the request body 
         // const status = req.body.status;
@@ -175,7 +164,208 @@ module.exports = {
                 data: results
             });
         });
+    },
+    teacherReg: (req, res) => {
+        const body = req.body;
+        teacherReg(body, (err, results) => {
+            if(err){
+                console.log(err);
+                return;
+            }
+            return res.json({
+                success: 1,
+                message: 'Teacher registered successfully'
+            });
+        });
+    },
+    viewTeachers: (req, res) => {
+        viewTeachers((err, results) => {
+            if(err){
+                console.log(err);
+                return;
+            }
+            return res.json({
+                success: 1,
+                data: results
+            });
+        });
+    },
+    removeTeacher: (req, res) => {
+        const ids = req.body.id;
+      const  getTecherDetailsToMoves = (id, callBack) =>{
+        getTecherDetailsToMove(id, (err, results) => {
+            if(err){
+                console.log(err);
+                return;
+            }
+            const values = results;
+            if(!results){
+                return res.json({
+                    success: 0,
+                    message: 'Record not found'
+                });
+            }
+            deletedTeacher(values, (err, results) => {
+                if(err){
+                    console.log(err);
+                    return;
+                }
+                teacherDelete(id, (err, results) => {
+                    if(err){
+                        console.log(err);
+                        return;
+                    }
+                   
+                  
+                });
+            });
+        })
+        
+         
     }
-    
+    for (const id of ids) {
+        getTecherDetailsToMoves(id, (err, results) => {
+          if (err) {
+            console.log(err);
+            return;
+          }
+        });
+      }
+    return res.json({
+        success: 1,
+        message: 'Teacher removed successfully'
+    });
+},
+    getDeletedTeachers: (req, res) => {
+        getDeletedTeachers((err, results) => {
+            if(err){
+                console.log(err);
+                return;
+            }
+            return res.json({
+                success: 1,
+                data: results
+            });
+        });
+    },
+    getStudentEmailById: (req, res) => {
+        const id = req.body.id;
+        getStudentEmailById(id, (err, results) => {
+            if(err){
+                console.log(err);
+                return;
+            }
+            if(!results){
+                return res.json({
+                    success: 0,
+                    message: 'Record not found'
+                });
+            }
+            return res.json({
+                success: 1,
+                data: results
+            });
+        });
+    },
+
+    viewCourseFees: (req, res) => {
+        viewCourseFees((err, results) => {
+            if(err){
+                console.log(err);
+                return;
+            }
+            return res.json({
+                success: 1,
+                data: results
+            });
+        });
+    },
+  
+      // Route handler for updating course fees
+ handleUpdateCourseFees : (req, res) => {
+    const data = req.body;
+  
+    updateCourseFees(data, (err, message) => {
+      if (err) {
+        console.error(err);
+        return res.json({
+          success: 0,
+          message: 'Failed to update course fees',
+        });
+      }
+      return res.json({
+        success: 1,
+        message: 'Course fees updated successfully',
+      });
+    });
+  },
+
+   courseRegOl: (req, res) => {
+        const body = req.body;
+        courseRegOl(body, (err, results) => {
+            if(err){
+                console.log(err);
+                return;
+            }
+            return res.json({
+                success: 1,
+                message: 'Course registered successfully'
+            });
+        });
+    },
+
+    courseRegAl: (req, res) => {
+        const body = req.body;
+        courseRegAl(body, (err, results) => {
+            if(err){
+                console.log(err);
+                return;
+            }
+            return res.json({
+                success: 1,
+                message: 'Course registered successfully'
+            });
+        });
+    },
+
+    studentDistrict: (req, res) => {
+        const body = req.body;
+        studentDistrict(body, (err, results) => {
+            if(err){
+                console.log(err);
+                return;
+            }
+            return res.json({
+                success: 1,
+                message: 'District registered successfully'
+            });
+        });
+    },
+
+    getStudentDistrictsFromDB: (req, res) => {
+        getStudentDistrictsFromDB((err, results) => {
+            if(err){
+                console.log(err);
+                return;
+            }
+            return res.json({
+                success: 1,
+                data: results
+            });
+        });
+    },
+
+    getStudentCounts (req, res) {
+        getStudentCounts((err, results) => {
+          if (err) {
+            console.log(err);
+            return res.status(500).json({ error: 'Internal Server Error' });
+          }
+      
+          return res.json({
+            data: results,
+          });
+        });
+      }
 
 }
